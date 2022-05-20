@@ -1,0 +1,33 @@
+{
+    "name": "take-chance",
+    "version": "3.0.1",
+    "description": "A JavaScript library to help with various tasks involving randomness.",
+    "main": "dist/index.js",
+    "files": [
+        "dist/*"
+    ],
+    "types": "dist/random.d.ts",
+    "scripts": {
+        "test": "nodemon dist/index.min.js",
+        "tstest": "ts-node-dev --respawn src/index.ts"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/joker876/take-chance.git"
+    },
+    "bugs": {
+        "url": "https://github.com/joker876/take-chance/issues"
+    },
+    "homepage": "https://github.com/joker876/take-chance#readme",
+    "keywords": [
+        "random",
+        "rng"
+    ],
+    "author": "joker876",
+    "license": "MIT",
+    "devDependencies": {
+        "nodemon": "^2.0.15",
+        "ts-node-dev": "^1.1.8",
+        "typescript": "^4.6.3"
+    }
+}
