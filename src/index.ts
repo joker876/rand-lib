@@ -1,3 +1,4 @@
+type integer = number;
 /**
  * Generates a random decimal number, chosen from between two numbers.
  * @param min The minimum number to generate. Optional, defaults to 0.
@@ -13,7 +14,7 @@ function float(min: number = 0, max: number = 1): number {
  * @param max The maximum number to generate. Optional, defaults to 100.
  * @returns A random integer between `min` and `max`.
  */
-function int(min: number = 0, max: number = 100): number {
+function int(min: integer = 0, max: integer = 100): integer {
     return Math.round(float(min, max));
 }
 /**
@@ -31,7 +32,7 @@ function boolean(probability: number = 0.5): boolean {
  * @param max The maximum number to generate. Optional, defaults to 100.
  * @returns A an array of random integers between `min` and `max`.
  */
-function multipleInt(length: number, min: number = 0, max: number = 100): number[] {
+function multipleInt(length: number, min: integer = 0, max: integer = 100): integer[] {
     let arr: number[] = [];
     for (let i = 0; i < length; i++) {
         arr.push(int(min, max));
@@ -45,7 +46,7 @@ function multipleInt(length: number, min: number = 0, max: number = 100): number
  * @param max The maximum number to generate. Optional, defaults to 1.
  * @returns A an array of random decimal numbers between `min` and `max`.
  */
-function multipleFloat(length: number, min: number = 0, max: number = 1): number[] {
+function multipleFloat(length: integer, min: number = 0, max: number = 1): number[] {
     let arr: number[] = [];
     for (let i = 0; i < length; i++) {
         arr.push(float(min, max));
@@ -83,16 +84,19 @@ function binomial(min: number = 0, max: number = 1, skew: number = 1) {
  * @param max The maximum index to choose from. Optional, defaults to the last index.
  * @returns A random element chosen from the array, from indexes between `min` and `max`.
  */
-function fromArray(array: any[], min: number = 0, max: number = array.length - 1): any {
+function fromArray<T>(array: T[], min: integer = 0, max: integer = array.length - 1): T {
+    if (min < 0) min = 0;
+    if (max > array.length - 1) max = array.length - 1;
     return array[int(min, max)];
 }
 /**
  * Chooses a random key from an object.
- * @param object The object to choose keys from. Required.
+ * @param obj The object to choose keys from. Required.
  * @returns A random key from the object.
  */
-function fromObject(object: object): unknown {
-    return fromArray(Object.keys(object));
+function fromObject<T extends object>(obj: T): keyof T {
+    let keys = Object.keys(obj) as (keyof T)[];
+    return fromArray(keys);
 }
 /**
  * Generates a random character from a predefined list. All duplicates in the final list are removed.
@@ -118,7 +122,7 @@ function character(options: { from?: string | string[], letters?: boolean, upper
     if (options.numbers) charArray.push(...('0123456789'.split('')));
     //add all ASCII special characters
     if (options.special) charArray.push(...('!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'.split('')));
-    //remove duplicates, taken from https://stackoverflow.com/questions/9229645/remove-duplicate-values-from-js-array
+    //remove duplicates
     charArray = [...new Set(charArray)];
     //return
     return fromArray(charArray);
@@ -134,7 +138,7 @@ function character(options: { from?: string | string[], letters?: boolean, upper
  * * `special` - allows to choose from all ASCII special characters
  * @returns A random string of characters chosen from the predefined list.
  */
-function string(length: number, options: { from?: string | string[], letters?: boolean, uppercase?: boolean, lowercase?: boolean, numbers?: boolean, special?: boolean }): string {
+function string(length: integer, options: { from?: string | string[], letters?: boolean, uppercase?: boolean, lowercase?: boolean, numbers?: boolean, special?: boolean }): string {
     let str = '';
     for (let i = 0; i < length; i++) {
         str += character(options);
@@ -155,14 +159,14 @@ function date(min: Date, max: Date = new Date(Date.now())): Date {
  * @param length The length of the returned id. Optional, defaults to 10.
  * @returns A random string of characters a-z, A-Z, 0-9, "_", and "-".
  */
-function id(length: number = 10): string {
+function id(length: integer = 10): string {
     let ret = '';
     //characters 0-9, "-", and "_" shouldn't be first in the id
     do {
         ret = character({ letters: true, numbers: true, from: '-_' });
     } while (ret <= '9' || ret == '_'); // <= '9' elliminates all numbers and "-", == '_' elliminates "_".
     //add the rest of the id normally
-    for (let i = 0; i < length; i++) {
+    for (let i = 1; i < length; i++) {
         ret += character({ letters: true, numbers: true, from: '-_' });
     }
     return ret;
@@ -172,14 +176,14 @@ function id(length: number = 10): string {
  * @param n Amount of sides of the die. Optional, defaults to 6.
  * @returns a random number that may appear on the chosen die. The numbers always range from 1 to `n`.
  */
-function die(n: number = 6): number {
+function die(n: integer = 6): number {
     return int(1, n);
 }
 /**
  * Generates a random RGB color.
  * @returns An object containing `r`, `g`, and `b` properties, each with a 0-1 number.
  */
-function rgbColor(): { r: number, g: number, b: number } {
+function rgbColor(): { r: integer, g: integer, b: integer } {
     return {
         r: int(0, 255),
         g: int(0, 255),
