@@ -1,6 +1,24 @@
 type integer = number;
 /**
  * Generates a random decimal number, chosen from between two numbers.
+ * This method uses a [cryptographically secure random number generator](https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues). 
+ * @param min The minimum number to generate. Optional, defaults to 0.
+ * @param max The maximum number to generate. Optional, defaults to 1.
+ * @returns A random decimal number between `min` and `max`.
+ */
+function secureInt(min: integer = 0, max: integer = 100): integer {
+    const randomBuffer = new Uint32Array(1);
+
+    crypto.getRandomValues(randomBuffer);
+
+    let rand = randomBuffer[0] / (0xffffffff + 1);
+
+    min = Math.ceil(min);
+    max = Math.floor(max);
+    return Math.floor(rand * (max - min + 1)) + min;
+}
+/**
+ * Generates a random decimal number, chosen from between two numbers.
  * @param min The minimum number to generate. Optional, defaults to 0.
  * @param max The maximum number to generate. Optional, defaults to 1.
  * @returns A random decimal number between `min` and `max`.
@@ -199,6 +217,7 @@ function hexColor(): string {
 }
 export const TakeChance = {
     int,
+    secureInt,
     float,
     multipleInt,
     multipleFloat,
