@@ -1,6 +1,6 @@
 {
     "name": "take-chance",
-    "version": "4.2.0",
+    "version": "4.3.0",
     "description": "A JavaScript library to help with various tasks involving randomness.",
     "main": "dist/index.js",
     "files": [
