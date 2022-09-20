@@ -189,6 +189,18 @@ function id(length: integer = 10): string {
     }
     return ret;
 }
+function password(length: integer = 16): string {
+    let ret = '';
+    do {
+        ret = string(length, { letters: true, numbers: true, special: true });
+    } while (
+        (ret.match(/[a-z]/g)?.length ?? 0) < length / 4 ||
+        (ret.match(/[A-Z]/g)?.length ?? 0) < length / 4 ||
+        (ret.match(/[0-9]/g)?.length ?? 0) < length / 6 ||
+        (ret.match(/[!"#$%&'()*+,\-./:;<=>?@[\\]\^_`{|}~]/g)?.length ?? 0) < length / 8
+    );
+    return ret;
+}
 /**
  * Rolls an *n*-sided die and returns the result.
  * @param n Amount of sides of the die. Optional, defaults to 6.
@@ -229,7 +241,9 @@ export const TakeChance = {
     fromObject,
     date,
     id,
+    password,
     die,
     rgbColor,
     hexColor,
 }
+export default TakeChance;
